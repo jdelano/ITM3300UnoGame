@@ -9,8 +9,11 @@ import SwiftUI
 
 struct UnoCardView: View {
     @State private var isFaceUp = true
-    let symbol: String
+    let cardType: CardType
     let color: Color
+    var symbol: String {
+        cardType.symbol
+    }
     
     var body: some View {
         cardFront
@@ -72,11 +75,11 @@ struct UnoCardView: View {
         Text(symbol)
             .font(.system(size: size))
             .bold()
-            .underline(symbol == "6" || symbol == "9", color: .white)
+            .underline(symbol == "6" || symbol == "9", color: color)
             .foregroundStyle(color)
     }
 }
 
 #Preview {
-    UnoCardView(symbol: "9", color: .red)
+    UnoCardView(cardType: .number(9), color: .red)
 }

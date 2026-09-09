@@ -11,7 +11,18 @@ import SwiftUI
 struct ContentView: View {
     
     var body: some View {
-        UnoCardView(symbol: "9", color: .red)
+        VStack {
+            HStack {
+                UnoCardView(cardType: .wildDrawFour, color: .black)
+                UnoCardView(cardType: .drawTwo, color: .yellow)
+
+            }
+            HStack {
+                UnoCardView(cardType: .number(6), color: .green)
+                UnoCardView(cardType: .skip, color: .blue)
+
+            }
+        }
 
     }
     
