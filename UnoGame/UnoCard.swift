@@ -6,3 +6,8 @@
 //
 
 import Foundation
+
+struct UnoCard {
+    let type: CardType
+    let color: CardColor
+}

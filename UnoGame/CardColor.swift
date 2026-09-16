@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+enum CardColor {
+    case red, yellow, green, blue, wild
+}
