@@ -9,19 +9,25 @@
 import SwiftUI
 
 struct ContentView: View {
-    
+    let viewModel = UnoGameViewModel()
     var body: some View {
         VStack {
             HStack {
-                UnoCardView(cardType: .wildDrawFour, color: .black)
-                UnoCardView(cardType: .drawTwo, color: .yellow)
-
+                ForEach(viewModel.cards) { card in
+                    UnoCardView(card: card, viewModel: viewModel)
+                }
             }
             HStack {
-                UnoCardView(cardType: .number(6), color: .green)
-                UnoCardView(cardType: .skip, color: .blue)
-
+                Button("New Game") {
+                    viewModel.newGame()
+                }
+                Button("Deal") {
+                    viewModel.deal()
+                }
+                
             }
+            .font(.title2)
+            .buttonStyle(.borderedProminent)
         }
 
     }

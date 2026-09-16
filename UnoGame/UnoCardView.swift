@@ -9,10 +9,15 @@ import SwiftUI
 
 struct UnoCardView: View {
     @State private var isFaceUp = true
-    let cardType: CardType
-    let color: Color
-    var symbol: String {
-        cardType.symbol
+    let card: UnoCard
+    let viewModel: UnoGameViewModel
+    
+    private var symbol: String {
+        card.type.symbol
+    }
+    
+    private var color: Color {
+        viewModel.color(for: card)
     }
     
     var body: some View {
@@ -81,5 +86,5 @@ struct UnoCardView: View {
 }
 
 #Preview {
-    UnoCardView(cardType: .number(9), color: .red)
+    UnoCardView(card: UnoCard(type: .drawTwo, color: .green), viewModel: UnoGameViewModel())
 }

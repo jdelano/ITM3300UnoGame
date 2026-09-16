@@ -7,13 +7,40 @@
 
 import SwiftUI
 
+@Observable
 class UnoGameViewModel {
-    var cards: [UnoCard] = [
-        UnoCard(type: .wildDrawFour, color: .wild),
-        UnoCard(type: .drawTwo, color: .yellow),
-        UnoCard(type: .number(6), color: .green),
-        UnoCard(type: .skip, color: .blue)
-    ]
+    var cards: [UnoCard] = []
+    private var deck: [UnoCard] = []
+    
+    func newGame() {
+        deck = []
+        for color in [CardColor.red, .yellow, .green, .blue] {
+            deck.append(UnoCard(type: .number(0), color: color))
+            for _ in 1...2 {
+                for number in 1...9 {
+                    deck.append(UnoCard(type: .number(number), color: color))
+                }
+                deck.append(UnoCard(type: .skip, color: color))
+                deck.append(UnoCard(type: .reverse, color: color))
+                deck.append(UnoCard(type: .drawTwo, color: color))
+            }
+        }
+        for _ in 1...4 {
+            deck.append(UnoCard(type: .wild, color: .wild))
+            deck.append(UnoCard(type: .wildDrawFour, color: .wild))
+        }
+        deck.shuffle()
+        cards = []
+        deal(7)
+    }
+    
+    func deal(_ count: Int = 1) {
+        for _ in 0..<count {
+            if let card = deck.popLast() {
+                cards.append(card)
+            }
+        }
+    }
     
     func color(for card: UnoCard) -> Color {
         switch card.color {

@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct UnoCard {
+struct UnoCard : Identifiable {
+    let id: UUID = UUID()
     let type: CardType
     let color: CardColor
 }
