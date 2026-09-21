@@ -11,6 +11,7 @@ import SwiftUI
 class UnoGameViewModel {
     var cards: [UnoCard] = []
     private var deck: [UnoCard] = []
+    var discardPile: [UnoCard] = []
     
     func newGame() {
         deck = []
@@ -31,7 +32,12 @@ class UnoGameViewModel {
         }
         deck.shuffle()
         cards = []
+        discardPile = []
         deal(7)
+        if let card = deck.popLast() {
+            discardPile.append(card)
+        }
+
     }
     
     func deal(_ count: Int = 1) {
@@ -40,6 +46,10 @@ class UnoGameViewModel {
                 cards.append(card)
             }
         }
+    }
+    
+    func play(_ card: UnoCard) {
+        
     }
     
     func color(for card: UnoCard) -> Color {

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct UnoCardView: View {
-    @State private var isFaceUp = true
     let card: UnoCard
     let viewModel: UnoGameViewModel
     
@@ -22,15 +21,7 @@ struct UnoCardView: View {
     
     var body: some View {
         cardFront
-            .cardify(isFaceUp: isFaceUp)
-            .onTapGesture {
-                isFaceUp.toggle()
-                //            if isFaceUp {
-                //                isFaceUp = false
-                //            } else {
-                //                isFaceUp = true
-                //            }
-            }
+            .cardify(isFaceUp: true)
     }
     
     @ViewBuilder
