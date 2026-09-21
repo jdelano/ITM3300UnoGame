@@ -29,6 +29,9 @@ struct ContentView: View {
             .font(.title2)
             .buttonStyle(.borderedProminent)
         }
+        .onAppear {
+            runExperiment()
+        }
 
     }
     
