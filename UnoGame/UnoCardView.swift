@@ -22,6 +22,9 @@ struct UnoCardView: View {
     var body: some View {
         cardFront
             .cardify(isFaceUp: true)
+            .onTapGesture {
+                viewModel.play(card)
+            }
     }
     
     @ViewBuilder

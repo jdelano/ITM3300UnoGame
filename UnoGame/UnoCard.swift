@@ -11,4 +11,8 @@ struct UnoCard : Identifiable {
     let id: UUID = UUID()
     let type: CardType
     let color: CardColor
+    
+    func matches(_ other: UnoCard) -> Bool {
+        color == .wild || other.color == .wild || color == other.color || type.symbol == other.type.symbol
+    }
 }

@@ -9,7 +9,17 @@ import SwiftUI
 
 @Observable
 class UnoGameViewModel {
-    var cards: [UnoCard] = []
+    var statusMessage: String? = nil
+    var cardsRemaining: Int {
+        deck.count
+    }
+    var cards: [UnoCard] = [] {
+        didSet {
+            if cards.isEmpty && !oldValue.isEmpty {
+                statusMessage = "You played your whole hand!"
+            }
+        }
+    }
     private var deck: [UnoCard] = []
     var discardPile: [UnoCard] = []
     
@@ -33,7 +43,7 @@ class UnoGameViewModel {
         deck.shuffle()
         cards = []
         discardPile = []
-        deal(7)
+        deal(1)
         if let card = deck.popLast() {
             discardPile.append(card)
         }
@@ -49,7 +59,11 @@ class UnoGameViewModel {
     }
     
     func play(_ card: UnoCard) {
-        
+        if let top = discardPile.last, !card.matches(top) { return }
+        if let index = cards.firstIndex(where: { $0.id == card.id }) {
+            cards.remove(at: index)
+            discardPile.append(card)
+        }
     }
     
     func color(for card: UnoCard) -> Color {
