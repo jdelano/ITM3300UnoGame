@@ -26,6 +26,9 @@ struct ContentView: View {
                 Button("Deal") {
                     viewModel.deal()
                 }
+                Button("Sort") {
+                    viewModel.sortHand()
+                }
                 
             }
             .font(.title2)

@@ -9,6 +9,7 @@ import SwiftUI
 
 @Observable
 class UnoGameViewModel {
+    static let openingHandSize = 7
     var statusMessage: String? = nil
     var cardsRemaining: Int {
         deck.count
@@ -25,7 +26,7 @@ class UnoGameViewModel {
     
     func newGame() {
         deck = []
-        for color in [CardColor.red, .yellow, .green, .blue] {
+        for color in CardColor.allCases where color != .wild {
             deck.append(UnoCard(type: .number(0), color: color))
             for _ in 1...2 {
                 for number in 1...9 {
@@ -43,11 +44,11 @@ class UnoGameViewModel {
         deck.shuffle()
         cards = []
         discardPile = []
-        deal(1)
+        deal(Self.openingHandSize)
         if let card = deck.popLast() {
             discardPile.append(card)
         }
-
+        statusMessage = nil
     }
     
     func deal(_ count: Int = 1) {
@@ -76,6 +77,8 @@ class UnoGameViewModel {
         }
     }
     
-
+    func sortHand() {
+        cards.sort()
+    }
 }
 

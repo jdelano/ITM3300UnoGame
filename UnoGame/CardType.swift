@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CardType {
+enum CardType: Equatable {
     case number(Int), skip, reverse, drawTwo, wild, wildDrawFour
     
     var symbol: String {
@@ -24,6 +24,19 @@ enum CardType {
                 return "+4"
             case .number(let cardNumber):
                 return String("\(cardNumber)")
+        }
+    }
+}
+
+extension CardType: Comparable {
+    var sortRank: Int {
+        switch self {
+            case .number (let value): value
+            case .skip: 10
+            case .reverse: 11
+            case .drawTwo: 12
+            case .wild: 13
+            case .wildDrawFour: 14
         }
     }
 }
