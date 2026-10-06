@@ -29,56 +29,75 @@ struct UnoCardView: View {
     
     @ViewBuilder
     private var cardFront: some View {
-        // Card front (blue 7)
-        cardChrome(color: color, ellipseColor: .white)
-        
-        cardSymbol(color: color, size: 100)
-        
-        cornerSymbols
+        GeometryReader { geometry in
+            ZStack {
+                // Card front (blue 7)
+                cardChrome(color: color, ellipseColor: .white, size: geometry.size)
+                
+                cardSymbol(color: color, size: geometry.size.width * 0.5)
+                
+                cornerSymbols(size: geometry.size.width * 0.15)
+            }
+        }
     }
     
-    private func cardChrome(color: Color, ellipseColor: Color) -> some View {
+    private func cardChrome(color: Color, ellipseColor: Color, size: CGSize) -> some View {
         ZStack {
             // Black inner background, inset from the border
             RoundedRectangle(cornerRadius: 15)
                 .sunburst(color: color)
-//                .foregroundStyle(sunburstGradient(main: color, accent: color.opacity(0.75)))
+            //                .foregroundStyle(sunburstGradient(main: color, accent: color.opacity(0.75)))
                 .padding(10)
             
             // Red tilted ellipse in the center
             Ellipse()
                 .fill(ellipseColor)
                 .rotationEffect(.degrees(45))
-                .frame(width: 150, height: 200)
+                .frame(width: size.width * 0.75, height: size.height * 0.7)
         }
     }
     
-    private var cornerSymbols: some View {
+    private func cornerSymbols(size: CGFloat) -> some View {
         VStack {
             HStack {
-                cardSymbol(color: .white, size: 30)
+                cardSymbol(color: .white, size: size)
                 Spacer()
             }
             Spacer()
             HStack {
                 Spacer()
-                cardSymbol(color: .white, size: 30)
+                cardSymbol(color: .white, size: size)
                     .rotationEffect(.degrees(180))
             }
         }
         .padding(20)
     }
     
-    
+    @ViewBuilder
     private func cardSymbol(color: Color, size: CGFloat) -> some View {
-        Text(symbol)
-            .font(.system(size: size))
-            .bold()
-            .underline(symbol == "6" || symbol == "9", color: color)
-            .foregroundStyle(color)
+        let symbolSize = size * 2
+        switch card.type {
+            case .skip:
+                SkipSymbol(color: color)
+                    .frame(width: symbolSize, height: symbolSize)
+            case .reverse:
+                ReverseSymbol(color: color)
+                    .frame(width: symbolSize, height: symbolSize)
+            default:
+                
+                Text(symbol)
+                    .font(.system(size: size))
+                    .bold()
+                    .underline(symbol == "6" || symbol == "9", color: color)
+                    .foregroundStyle(color)
+        }
+        
     }
 }
 
 #Preview {
-    UnoCardView(card: UnoCard(type: .drawTwo, color: .green), viewModel: UnoGameViewModel())
+    UnoCardView(card: UnoCard(type: .skip, color: .green), viewModel: UnoGameViewModel())
+//    UnoCardView(card: UnoCard(type: .reverse, color: .green), viewModel: UnoGameViewModel())
+//    UnoCardView(card: UnoCard(type: .drawTwo, color: .green), viewModel: UnoGameViewModel())
+    
 }

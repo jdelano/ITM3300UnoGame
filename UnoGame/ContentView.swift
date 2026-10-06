@@ -12,8 +12,8 @@ struct ContentView: View {
     let viewModel = UnoGameViewModel()
     var body: some View {
         VStack {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: -150) {
+            ScrollView(showsIndicators: false) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 10) {
                     ForEach(viewModel.cards) { card in
                         UnoCardView(card: card, viewModel: viewModel)
                     }

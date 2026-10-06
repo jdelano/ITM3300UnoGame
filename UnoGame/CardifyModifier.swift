@@ -11,22 +11,26 @@ struct CardifyModifier: ViewModifier {
     let isFaceUp: Bool
     
     func body(content: Content) -> some View {
-        ZStack {
-            // White outer card with black border
-            RoundedRectangle(cornerRadius: 15)
-                .fill(.white)
-                .strokeBorder(.black)
-            if isFaceUp {
-                content
-            } else {
-                cardBack()
+        GeometryReader { geometry in
+            ZStack {
+                // White outer card with black border
+                RoundedRectangle(cornerRadius: 15)
+                    .fill(.white)
+                    .strokeBorder(.black)
+                if isFaceUp {
+                    content
+                } else {
+                    cardBack(size: geometry.size)
+                }
             }
         }
-        .frame(width: 200, height: 300)
+        .aspectRatio(2.0 / 3.0, contentMode: .fit)
+
+        //        .frame(width: 200, height: 300)
     }
     
     @ViewBuilder
-    private func cardBack() -> some View {
+    private func cardBack(size: CGSize) -> some View {
         // Black inner background, inset from the border
         RoundedRectangle(cornerRadius: 15)
             .padding(10)
@@ -35,11 +39,11 @@ struct CardifyModifier: ViewModifier {
         Ellipse()
             .sunburst(color: .red, accent: .red.opacity(0.9))
             .rotationEffect(.degrees(45))
-            .frame(width: 150, height: 200)
-        
+            .frame(width: size.width * 0.75, height: size.height * 0.7)
+
         // UNO logo with gradient, tilted, with shadow
         Text("UNO")
-            .font(.system(size: 60))
+            .font(.system(size: size.width * 0.35))
             .bold()
             .fixedSize()
             .foregroundStyle(
