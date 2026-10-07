@@ -59,12 +59,15 @@ class UnoGameViewModel {
         }
     }
     
+    func canPlay(_ card: UnoCard) -> Bool {
+        guard let top = discardPile.last else { return false }
+        return card.matches(top)
+    }
+    
     func play(_ card: UnoCard) {
-        if let top = discardPile.last, !card.matches(top) { return }
-        if let index = cards.firstIndex(where: { $0.id == card.id }) {
-            cards.remove(at: index)
-            discardPile.append(card)
-        }
+        guard canPlay(card), let index = cards.firstIndex(where: { $0.id == card.id }) else { return }
+        cards.remove(at: index)
+        discardPile.append(card)
     }
     
     func color(for card: UnoCard) -> Color {

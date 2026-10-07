@@ -20,10 +20,15 @@ struct UnoCardView: View {
     }
     
     var body: some View {
+        let isPlayable = viewModel.canPlay(card)
         cardFront
             .cardify(isFaceUp: true)
+            .opacity(isPlayable ? 1.0 : 0.55)
+//            .animation(.easeInOut(duration: 3.0), value: isPlayable)
             .onTapGesture {
-                viewModel.play(card)
+                withAnimation {
+                    viewModel.play(card)
+                }
             }
     }
     

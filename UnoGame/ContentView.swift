@@ -21,13 +21,19 @@ struct ContentView: View {
             }
             HStack {
                 Button("New Game") {
-                    viewModel.newGame()
+                    withAnimation(.bouncy(extraBounce: 0.1)) {
+                        viewModel.newGame()
+                    }
                 }
                 Button("Deal") {
-                    viewModel.deal()
+                    withAnimation {
+                        viewModel.deal()
+                    }
                 }
                 Button("Sort") {
-                    viewModel.sortHand()
+                    withAnimation {
+                        viewModel.sortHand()
+                    }
                 }
                 
             }
