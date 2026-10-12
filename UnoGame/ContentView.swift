@@ -9,13 +9,19 @@
 import SwiftUI
 
 struct ContentView: View {
-    let viewModel = UnoGameViewModel()
+    @State var viewModel = UnoGameViewModel()
+    @Namespace private var cardNameSpace
+    @State private var waitingToDeal: [UnoCard] = []
+    
+    
     var body: some View {
         VStack {
             ScrollView(showsIndicators: false) {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 10) {
                     ForEach(viewModel.cards) { card in
                         UnoCardView(card: card, viewModel: viewModel)
+                            .matchedGeometryEffect(id: card.id, in: cardNameSpace)
+                            .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
                     }
                 }
             }
@@ -23,6 +29,7 @@ struct ContentView: View {
                 Button("New Game") {
                     withAnimation(.bouncy(extraBounce: 0.1)) {
                         viewModel.newGame()
+                        waitingToDeal = viewModel.cards
                     }
                 }
                 Button("Deal") {
@@ -46,16 +53,30 @@ struct ContentView: View {
                     .font(.title2)
                     .bold()
             }
-            if let topCard = viewModel.discardPile.last {
-                Text("Discard Pile")
-                    .font(.headline)
-                UnoCardView(card: topCard, viewModel: viewModel)
+            HStack {
+                ZStack {
+                    ForEach(viewModel.deck) { card in
+                        Color.clear
+                            .cardify(isFaceUp: false)
+                            .matchedGeometryEffect(id: card.id, in: cardNameSpace)
+                            .transition(.asymmetric(insertion: .opacity, removal: .identity))
+                            .frame(height: 200)
+                            .id(card.id)
+                    }
+                }
+                if let topCard = viewModel.discardPile.last {
+                    UnoCardView(card: topCard, viewModel: viewModel)
+                        .matchedGeometryEffect(id: topCard.id, in: cardNameSpace)
+                        .id(topCard.id)
+                        .frame(height: 200)
+                }
             }
+            
         }
-
+        
     }
     
-
+    
     
 }
 

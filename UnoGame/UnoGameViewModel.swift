@@ -21,7 +21,7 @@ class UnoGameViewModel {
             }
         }
     }
-    private var deck: [UnoCard] = []
+    private(set) var deck: [UnoCard] = []
     var discardPile: [UnoCard] = []
     
     func newGame() {
@@ -61,7 +61,7 @@ class UnoGameViewModel {
     
     func canPlay(_ card: UnoCard) -> Bool {
         guard let top = discardPile.last else { return false }
-        return card.matches(top)
+        return card.matches(top) && card != top
     }
     
     func play(_ card: UnoCard) {
