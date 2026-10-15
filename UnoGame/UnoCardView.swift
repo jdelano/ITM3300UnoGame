@@ -10,6 +10,7 @@ import SwiftUI
 struct UnoCardView: View {
     let card: UnoCard
     let viewModel: UnoGameViewModel
+    var isFaceUp = true
     
     private var symbol: String {
         card.type.symbol
@@ -22,7 +23,7 @@ struct UnoCardView: View {
     var body: some View {
         let isPlayable = viewModel.canPlay(card)
         cardFront
-            .cardify(isFaceUp: true)
+            .cardify(isFaceUp: isFaceUp)
             .overlay(
                 Group {
                     if isPlayable {

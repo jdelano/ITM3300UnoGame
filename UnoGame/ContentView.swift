@@ -12,16 +12,18 @@ struct ContentView: View {
     @State var viewModel = UnoGameViewModel()
     @Namespace private var cardNameSpace
     @State private var waitingToDeal: [UnoCard] = []
-    
+    @State private var isHandHidden = false
     
     var body: some View {
         VStack {
             ScrollView(showsIndicators: false) {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 10) {
                     ForEach(viewModel.cards) { card in
-                        UnoCardView(card: card, viewModel: viewModel)
-                            .matchedGeometryEffect(id: card.id, in: cardNameSpace)
-                            .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
+                        if !waitingToDeal.contains(card) {
+                            UnoCardView(card: card, viewModel: viewModel, isFaceUp: !isHandHidden)
+                                .matchedGeometryEffect(id: card.id, in: cardNameSpace)
+                                .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
+                        }
                     }
                 }
             }
@@ -30,6 +32,11 @@ struct ContentView: View {
                     withAnimation(.bouncy(extraBounce: 0.1)) {
                         viewModel.newGame()
                         waitingToDeal = viewModel.cards
+                    }
+                    for index in viewModel.cards.indices {
+                        withAnimation(.easeInOut.delay(0.5 + 0.4 * Double(index))) {
+                            _ = waitingToDeal.removeFirst()
+                        }
                     }
                 }
                 Button("Deal") {
@@ -40,6 +47,11 @@ struct ContentView: View {
                 Button("Sort") {
                     withAnimation {
                         viewModel.sortHand()
+                    }
+                }
+                Button(isHandHidden ? "Show" : "Hide") {
+                    withAnimation(.easeInOut(duration: 6)) {
+                        isHandHidden.toggle()
                     }
                 }
                 
@@ -55,7 +67,7 @@ struct ContentView: View {
             }
             HStack {
                 ZStack {
-                    ForEach(viewModel.deck) { card in
+                    ForEach(viewModel.deck + waitingToDeal.reversed()) { card in
                         Color.clear
                             .cardify(isFaceUp: false)
                             .matchedGeometryEffect(id: card.id, in: cardNameSpace)

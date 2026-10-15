@@ -25,6 +25,7 @@ struct CardifyModifier: ViewModifier {
             }
         }
         .aspectRatio(2.0 / 3.0, contentMode: .fit)
+        .rotation3DEffect(.degrees(isFaceUp ? 0: 180), axis: (x: 0, y: 1, z: 0))
 
         //        .frame(width: 200, height: 300)
     }
