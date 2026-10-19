@@ -23,7 +23,6 @@ struct UnoCardView: View {
     var body: some View {
         let isPlayable = viewModel.canPlay(card)
         cardFront
-            .cardify(isFaceUp: isFaceUp)
             .overlay(
                 Group {
                     if isPlayable {
@@ -33,6 +32,8 @@ struct UnoCardView: View {
                     }
                 }
             )
+            .cardify(isFaceUp: isFaceUp)
+
 //            .opacity(isPlayable ? 1.0 : 0.55)
 //            .animation(.easeInOut(duration: 3.0), value: isPlayable)
             .onTapGesture {

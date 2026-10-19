@@ -20,7 +20,7 @@ struct UnoCard : Identifiable {
     }
 }
 
-extension UnoCard: Comparable {
+extension UnoCard: Comparable, Hashable {
     static func < (lhs: UnoCard, rhs: UnoCard) -> Bool {
         if lhs.color.sortRank != rhs.color.sortRank {
             return lhs.color.sortRank < rhs.color.sortRank

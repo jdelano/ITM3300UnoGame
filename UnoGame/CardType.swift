@@ -28,7 +28,7 @@ enum CardType: Equatable {
     }
 }
 
-extension CardType: Comparable {
+extension CardType: Comparable, Hashable {
     var sortRank: Int {
         switch self {
             case .number (let value): value

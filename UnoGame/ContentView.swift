@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var viewModel = UnoGameViewModel()
+    let viewModel: UnoGameViewModel
     @Namespace private var cardNameSpace
     @State private var waitingToDeal: [UnoCard] = []
     @State private var isHandHidden = false
@@ -85,6 +85,11 @@ struct ContentView: View {
             }
             
         }
+        .toolbar {
+            NavigationLink("History") {
+                HistoryView(viewModel: viewModel)
+            }
+        }
         
     }
     
@@ -93,7 +98,7 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(viewModel: UnoGameViewModel())
 }
 
 
