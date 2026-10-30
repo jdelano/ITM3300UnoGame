@@ -15,6 +15,8 @@ struct ContentView: View {
     @State private var isHandHidden = false
     @State private var showingRules = false
     @State private var showsHints = true
+    @State private var showingSettings = false
+    
     
     var body: some View {
         VStack {
@@ -25,6 +27,7 @@ struct ContentView: View {
                             UnoCardView(card: card, viewModel: viewModel, isFaceUp: !isHandHidden, showsHint: showsHints)
                                 .matchedGeometryEffect(id: card.id, in: cardNameSpace)
                                 .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
+                                .draggable(card.id.uuidString)
                         }
                     }
                 }
@@ -79,10 +82,20 @@ struct ContentView: View {
                     }
                 }
                 if let topCard = viewModel.discardPile.last {
-                    UnoCardView(card: topCard, viewModel: viewModel)
+                    UnoCardView(card: topCard, viewModel: viewModel, showsHint: showsHints)
                         .matchedGeometryEffect(id: topCard.id, in: cardNameSpace)
                         .id(topCard.id)
                         .frame(height: 200)
+                        .dropDestination(for: String.self) { ids, _ in
+                            guard let id = ids.first, let card = viewModel.cards.first(where: { $0.id.uuidString == id }),
+                                  viewModel.canPlay(card) else {
+                                return false
+                            }
+                            withAnimation {
+                                viewModel.play(card)
+                            }
+                            return true
+                        }
                 }
             }
             
@@ -94,9 +107,16 @@ struct ContentView: View {
             Button("Rules") {
                 showingRules = true
             }
+            Button("Settings", systemImage: "gearshape") {
+                showingSettings = true
+            }
         }
         .sheet(isPresented: $showingRules) {
             RulesView()
+        }
+        .sheet(isPresented: $showingSettings) {
+            SettingsView(showsHints: $showsHints)
+                .presentationDetents([.medium])
         }
         
     }

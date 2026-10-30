@@ -13,7 +13,8 @@ struct UnoCardView: View {
     var isFaceUp = true
     var showsHint: Bool
     
-    
+//    @GestureState private var dragOffset = CGSize.zero
+
     
     private var symbol: String {
         card.type.symbol
@@ -44,6 +45,14 @@ struct UnoCardView: View {
                     viewModel.play(card)
                 }
             }
+//            .offset(dragOffset)
+//            .gesture(
+//                DragGesture()
+//                    .updating($dragOffset) { value, state, _ in
+//                        state = value.translation
+//                    }
+//            )
+
     }
     
     @ViewBuilder
