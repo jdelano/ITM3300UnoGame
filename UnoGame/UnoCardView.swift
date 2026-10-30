@@ -11,6 +11,9 @@ struct UnoCardView: View {
     let card: UnoCard
     let viewModel: UnoGameViewModel
     var isFaceUp = true
+    var showsHint: Bool
+    
+    
     
     private var symbol: String {
         card.type.symbol
@@ -25,7 +28,7 @@ struct UnoCardView: View {
         cardFront
             .overlay(
                 Group {
-                    if isPlayable {
+                    if isPlayable && showsHint {
                         RoundedRectangle(cornerRadius: 15)
                             .fill(.clear)
                             .stroke(.orange, lineWidth: 10)
@@ -46,13 +49,14 @@ struct UnoCardView: View {
     @ViewBuilder
     private var cardFront: some View {
         GeometryReader { geometry in
+            let width = geometry.size.width
             ZStack {
                 // Card front (blue 7)
                 cardChrome(color: color, ellipseColor: .white, size: geometry.size)
-                
-                cardSymbol(color: color, size: geometry.size.width * 0.5)
-                
-                cornerSymbols(size: geometry.size.width * 0.15)
+                cardSymbol(color: color, size: width * 0.5)
+                if width > 80 {
+                    cornerSymbols(size: width * 0.15, inset: width * 0.1)
+                }
             }
         }
     }
@@ -60,10 +64,10 @@ struct UnoCardView: View {
     private func cardChrome(color: Color, ellipseColor: Color, size: CGSize) -> some View {
         ZStack {
             // Black inner background, inset from the border
-            RoundedRectangle(cornerRadius: 15)
+            RoundedRectangle(cornerRadius: size.width * 0.075)
                 .sunburst(color: color)
             //                .foregroundStyle(sunburstGradient(main: color, accent: color.opacity(0.75)))
-                .padding(10)
+                .padding(size.width * 0.05)
             
             // Red tilted ellipse in the center
             Ellipse()
@@ -73,7 +77,7 @@ struct UnoCardView: View {
         }
     }
     
-    private func cornerSymbols(size: CGFloat) -> some View {
+    private func cornerSymbols(size: CGFloat, inset: CGFloat) -> some View {
         VStack {
             HStack {
                 cardSymbol(color: .white, size: size)
@@ -86,7 +90,7 @@ struct UnoCardView: View {
                     .rotationEffect(.degrees(180))
             }
         }
-        .padding(20)
+        .padding(inset)
     }
     
     @ViewBuilder
@@ -112,7 +116,7 @@ struct UnoCardView: View {
 }
 
 #Preview {
-    UnoCardView(card: UnoCard(type: .skip, color: .green), viewModel: UnoGameViewModel())
+    UnoCardView(card: UnoCard(type: .skip, color: .green), viewModel: UnoGameViewModel(), showsHint: true)
 //    UnoCardView(card: UnoCard(type: .reverse, color: .green), viewModel: UnoGameViewModel())
 //    UnoCardView(card: UnoCard(type: .drawTwo, color: .green), viewModel: UnoGameViewModel())
     

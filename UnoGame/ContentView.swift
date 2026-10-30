@@ -13,6 +13,8 @@ struct ContentView: View {
     @Namespace private var cardNameSpace
     @State private var waitingToDeal: [UnoCard] = []
     @State private var isHandHidden = false
+    @State private var showingRules = false
+    @State private var showsHints = true
     
     var body: some View {
         VStack {
@@ -20,7 +22,7 @@ struct ContentView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 10) {
                     ForEach(viewModel.cards) { card in
                         if !waitingToDeal.contains(card) {
-                            UnoCardView(card: card, viewModel: viewModel, isFaceUp: !isHandHidden)
+                            UnoCardView(card: card, viewModel: viewModel, isFaceUp: !isHandHidden, showsHint: showsHints)
                                 .matchedGeometryEffect(id: card.id, in: cardNameSpace)
                                 .transition(.asymmetric(insertion: .scale.combined(with: .opacity), removal: .opacity))
                         }
@@ -89,6 +91,12 @@ struct ContentView: View {
             NavigationLink("History") {
                 HistoryView(viewModel: viewModel)
             }
+            Button("Rules") {
+                showingRules = true
+            }
+        }
+        .sheet(isPresented: $showingRules) {
+            RulesView()
         }
         
     }
@@ -98,7 +106,9 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView(viewModel: UnoGameViewModel())
+    NavigationStack {
+        ContentView(viewModel: UnoGameViewModel())
+    }
 }
 
 

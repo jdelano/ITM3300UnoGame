@@ -25,9 +25,10 @@ struct CardifyModifier: ViewModifier, Animatable {
 
     func body(content: Content) -> some View {
         GeometryReader { geometry in
+            let width = geometry.size.width
             ZStack {
                 // White outer card with black border
-                RoundedRectangle(cornerRadius: 15)
+                RoundedRectangle(cornerRadius: width * 0.075)
                     .fill(.white)
                     .strokeBorder(.black)
                 if isFaceUp {

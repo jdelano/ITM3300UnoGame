@@ -7,6 +7,11 @@
 
 import SwiftUI
 
+enum Route: Hashable {
+    case game, history
+}
+
+
 struct HomeView: View {
     @State var viewModel = UnoGameViewModel()
 
@@ -16,14 +21,20 @@ struct HomeView: View {
                 Color.clear
                     .cardify(isFaceUp: false)
                     .frame(width: 180)
-                NavigationLink("Play") {
-                    ContentView(viewModel: viewModel)
-                }
+                NavigationLink("Play", value: Route.game)
                 NavigationLink("How to Play") {
                     RulesView()
                 }
             }
+            .navigationTitle("Uno")
+            .navigationDestination(for: Route.self) { route in
+                switch route {
+                    case .game: ContentView(viewModel: viewModel)
+                    case .history: HistoryView(viewModel: viewModel)
+                }
+            }
         }
+        
     }
 }
 

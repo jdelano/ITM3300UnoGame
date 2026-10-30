@@ -20,5 +20,7 @@ struct RulesView: View {
 }
 
 #Preview {
-    RulesView()
+    NavigationStack {
+        RulesView()
+    }
 }
