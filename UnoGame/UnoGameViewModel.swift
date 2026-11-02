@@ -21,10 +21,19 @@ class UnoGameViewModel {
             }
         }
     }
+    
     private(set) var deck: [UnoCard] = []
     var discardPile: [UnoCard] = []
+    var gamesPlayed = UserDefaults.standard.integer(forKey: "gamesPlayed") {
+        didSet {
+            UserDefaults.standard.set(gamesPlayed, forKey: "gamesPlayed")
+        }
+    }
+    
+    
     
     func newGame() {
+        gamesPlayed += 1
         deck = []
         for color in CardColor.allCases where color != .wild {
             deck.append(UnoCard(type: .number(0), color: color))

@@ -14,7 +14,7 @@ struct ContentView: View {
     @State private var waitingToDeal: [UnoCard] = []
     @State private var isHandHidden = false
     @State private var showingRules = false
-    @State private var showsHints = true
+    @AppStorage("showsHints") private var showsHints = true
     @State private var showingSettings = false
     
     

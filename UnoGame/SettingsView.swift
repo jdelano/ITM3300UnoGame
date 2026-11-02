@@ -9,10 +9,12 @@ import SwiftUI
 
 struct SettingsView: View {
     @Binding var showsHints: Bool
+    @AppStorage("playerName") private var playerName = "Player 1"
     
     var body: some View {
         NavigationStack {
             Form {
+                TextField("Your name", text: $playerName)
                 Toggle("Show playable hints", isOn: $showsHints)
             }
             .navigationTitle("Settings")
