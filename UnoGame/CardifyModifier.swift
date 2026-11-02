@@ -28,9 +28,10 @@ struct CardifyModifier: ViewModifier, Animatable {
             let width = geometry.size.width
             ZStack {
                 // White outer card with black border
-                RoundedRectangle(cornerRadius: width * 0.075)
+                rectangle(width: width)
                     .fill(.white)
                     .strokeBorder(.black)
+
                 if isFaceUp {
                     content
                 } else {
@@ -45,17 +46,27 @@ struct CardifyModifier: ViewModifier, Animatable {
         //        .frame(width: 200, height: 300)
     }
     
+    private func rectangle(width: CGFloat) -> some InsettableShape {
+        RoundedRectangle(cornerRadius: width * 0.075)
+    }
+    
     @ViewBuilder
     private func cardBack(size: CGSize) -> some View {
-        // Black inner background, inset from the border
-        RoundedRectangle(cornerRadius: 15)
-            .padding(10)
-        
-        // Red tilted ellipse in the center
-        Ellipse()
-            .sunburst(color: .red, accent: .red.opacity(0.9))
-            .rotationEffect(.degrees(45))
-            .frame(width: size.width * 0.75, height: size.height * 0.7)
+        let width = size.width
+        // Black inner background, inset from the border, with the red
+        // tilted ellipse layered on top. The ellipse is placed inside the
+        // rectangle's overlay and the whole group is clipped to the same
+        // rounded rectangle so the ellipse can't spill past the black area.
+        // Padding is applied last so the clip shape matches the inset size.
+        rectangle(width: width)
+            .overlay {
+                Ellipse()
+                    .sunburst(color: .red, accent: .red.opacity(0.9))
+                    .rotationEffect(.degrees(45))
+                    .frame(width: size.width * 0.7, height: size.height * 0.7)
+            }
+            .clipShape(rectangle(width: width))
+            .padding(width * 0.07)
 
         // UNO logo with gradient, tilted, with shadow
         Text("UNO")
@@ -78,4 +89,10 @@ extension View {
     func cardify(isFaceUp: Bool) -> some View {
         self.modifier(CardifyModifier(isFaceUp: isFaceUp))
     }
+}
+
+#Preview {
+    Text("Card")
+        .cardify(isFaceUp: false)
+        .frame(width: 70)
 }
