@@ -9,6 +9,7 @@ import SwiftUI
 
 @Observable
 class UnoGameViewModel {
+    static let saveURL = URL.documentsDirectory.appending(path: "uno-game.json")
     static let openingHandSize = 7
     var statusMessage: String? = nil
     var cardsRemaining: Int {
@@ -29,6 +30,11 @@ class UnoGameViewModel {
             UserDefaults.standard.set(gamesPlayed, forKey: "gamesPlayed")
         }
     }
+    
+    init() {
+        load()
+    }
+    
     
     
     
@@ -58,6 +64,7 @@ class UnoGameViewModel {
             discardPile.append(card)
         }
         statusMessage = nil
+        save()
     }
     
     func deal(_ count: Int = 1) {
@@ -77,6 +84,7 @@ class UnoGameViewModel {
         guard canPlay(card), let index = cards.firstIndex(where: { $0.id == card.id }) else { return }
         cards.remove(at: index)
         discardPile.append(card)
+        save()
     }
     
     func color(for card: UnoCard) -> Color {
@@ -91,6 +99,29 @@ class UnoGameViewModel {
     
     func sortHand() {
         cards.sort()
+    }
+    
+    func save() {
+        let game = SavedGame(cards: cards, discardPile: discardPile, deck: deck)
+        do {
+            let data = try JSONEncoder().encode(game)
+            try data.write(to: Self.saveURL)
+        } catch {
+            print("Save failed: \(error)")
+        }
+    }
+    
+    func load() {
+        do {
+            let data = try Data(contentsOf: Self.saveURL)
+            let game = try JSONDecoder().decode(SavedGame.self, from: data)
+            cards = game.cards
+            discardPile = game.discardPile
+            deck = game.deck
+        } catch {
+            print("Failed to load game \(error)")
+            newGame()
+        }
     }
 }
 

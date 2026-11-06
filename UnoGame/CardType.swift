@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CardType: Equatable {
+enum CardType: Equatable, Codable {
     case number(Int), skip, reverse, drawTwo, wild, wildDrawFour
     
     var symbol: String {

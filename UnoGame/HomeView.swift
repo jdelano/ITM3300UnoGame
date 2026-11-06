@@ -38,6 +38,9 @@ struct HomeView: View {
                 }
             }
         }
+//        .onAppear {
+//            runExperiments()
+//        }
         
     }
 }
