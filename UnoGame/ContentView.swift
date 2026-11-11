@@ -9,6 +9,8 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var hintCard: UnoCard?
+    
     let viewModel: UnoGameViewModel
     @Namespace private var cardNameSpace
     @State private var waitingToDeal: [UnoCard] = []
@@ -59,12 +61,20 @@ struct ContentView: View {
                         isHandHidden.toggle()
                     }
                 }
+                Button("Hint") {
+                    Task {
+                        hintCard = await viewModel.hint()
+                    }
+                }
                 
             }
             .font(.title2)
             .buttonStyle(.borderedProminent)
             Text("Deck: \(viewModel.cardsRemaining) cards")
                 .font(.headline)
+            if let hintCard {
+                Text("Try the \(hintCard.name)")
+            }
             if let message = viewModel.statusMessage {
                 Text(message)
                     .font(.title2)

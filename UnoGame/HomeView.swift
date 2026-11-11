@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum Route: Hashable {
-    case game, history
+    case game, history, scores
 }
 
 
@@ -26,6 +26,7 @@ struct HomeView: View {
                 NavigationLink("How to Play") {
                     RulesView()
                 }
+                NavigationLink("High scores", value: Route.scores)
                 Text(playerName == "Player 1" ? " Welcome!" : "Welcome back, \(playerName)!")
                 Text("Games played: \(viewModel.gamesPlayed)")
                     .font(.headline)
@@ -35,9 +36,11 @@ struct HomeView: View {
                 switch route {
                     case .game: ContentView(viewModel: viewModel)
                     case .history: HistoryView(viewModel: viewModel)
+                    case .scores: ScoresView()
                 }
             }
         }
+//        .task { await fetchRawScores() }
 //        .onAppear {
 //            runExperiments()
 //        }

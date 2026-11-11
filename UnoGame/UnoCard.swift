@@ -11,6 +11,9 @@ struct UnoCard : Identifiable, Codable {
     var id: UUID = UUID()
     let type: CardType
     let color: CardColor
+    var name: String {
+        "\(type.symbol) \(color)"
+    }
     
     func matches(_ other: UnoCard) -> Bool {
         color == .wild ||

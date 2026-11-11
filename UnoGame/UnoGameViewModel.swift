@@ -123,5 +123,10 @@ class UnoGameViewModel {
             newGame()
         }
     }
+    
+    func hint() async -> UnoCard? {
+        try? await Task.sleep(for: .seconds(3))
+        return cards.first { canPlay($0) }
+    }
 }
 
