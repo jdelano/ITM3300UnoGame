@@ -30,7 +30,7 @@ struct ScoresView: View {
             }
         }
         .navigationTitle("High Scores")
-        .task { await viewModel.loadScores() }
+        .task { await viewModel.startPolling() }
     }
 }
 

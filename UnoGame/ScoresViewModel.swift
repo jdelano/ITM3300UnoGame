@@ -22,6 +22,15 @@ class ScoresViewModel {
                                     "https://gameapi.drjdelano.com/uno/scores?semesterTag=2026FA")!
     private let apiKey = "ce854fef1f7bf5eb1d43f8bec6735d7773caa68d1f7e0097353c46c78d2dc813"
 
+    func startPolling() async {
+        while !Task.isCancelled {
+            print("Polling...")
+            await loadScores()
+            try? await Task.sleep(for: .seconds(5))
+        }
+        print("Polling stopped")
+    }
+    
     func loadScores() async {
         var request = URLRequest(url: scoresURL)
         request.setValue(apiKey, forHTTPHeaderField: "X-Api-Key")
