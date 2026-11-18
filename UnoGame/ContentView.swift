@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
     @State private var hintCard: UnoCard?
@@ -18,7 +19,7 @@ struct ContentView: View {
     @State private var showingRules = false
     @AppStorage("showsHints") private var showsHints = true
     @State private var showingSettings = false
-    
+    @Environment(\.modelContext) private var context
     
     var body: some View {
         VStack {
@@ -36,6 +37,10 @@ struct ContentView: View {
             }
             HStack {
                 Button("New Game") {
+                    if viewModel.discardPile.count > 1 {
+                        context.insert(GameRecord(cardsPlayed: viewModel.discardPile.count - 1,
+                                                  cardsLeft: viewModel.cards.count))
+                    }
                     withAnimation(.bouncy(extraBounce: 0.1)) {
                         viewModel.newGame()
                         waitingToDeal = viewModel.cards

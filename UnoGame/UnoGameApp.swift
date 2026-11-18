@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct UnoGameApp: App {
@@ -13,5 +14,6 @@ struct UnoGameApp: App {
         WindowGroup {
             HomeView()
         }
+        .modelContainer(for: GameRecord.self)
     }
 }

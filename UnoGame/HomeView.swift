@@ -8,7 +8,7 @@
 import SwiftUI
 
 enum Route: Hashable {
-    case game, history, scores, liveGame
+    case game, history, scores, liveGame, pastGames
 }
 
 
@@ -24,6 +24,7 @@ struct HomeView: View {
                     .frame(width: 180)
                 NavigationLink("Play", value: Route.game)
                 NavigationLink("Live Uno", value: Route.liveGame)
+                NavigationLink("Past Games", value: Route.pastGames)
                 NavigationLink("How to Play") {
                     RulesView()
                 }
@@ -39,6 +40,7 @@ struct HomeView: View {
                     case .history: HistoryView(viewModel: viewModel)
                     case .scores: ScoresView()
                     case .liveGame: LiveGameView()
+                    case .pastGames: PastGamesView()
                 }
             }
         }
